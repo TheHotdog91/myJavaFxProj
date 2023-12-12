@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pack.DocumentApp">
+  <center>
+    <TableView fx:id="documentTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <columns>
+        <TableColumn text="Documents" />
+      </columns>
+    </TableView>
+  </center>
+  <bottom>
+    <ToolBar BorderPane.alignment="CENTER">
+      <items>
+        <Button fx:id="createButton" mnemonicParsing="false" text="Create" />
+        <Button fx:id="saveButton" mnemonicParsing="false" text="Save" />
+        <Button fx:id="loadButton" mnemonicParsing="false" text="Load" />
+        <Button fx:id="viewButton" mnemonicParsing="false" text="View" />
+        <Button mnemonicParsing="false" onAction="deleteSelectedDocuments" text="Delete" />
+      </items>
+    </ToolBar>
+  </bottom>
+</BorderPane>
+
