@@ -17,10 +17,102 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import java.io.BufferedReader;
 import  java.io.FileReader;
-
+import java.time.LocalDate;
 
 public class DocumentController {
 
+
+
+    @FXML
+    private TableColumn<Document, String> numberColumn;
+
+    @FXML
+    private TableColumn<Document, LocalDate> dateColumn;
+
+    @FXML
+    private TableColumn<Document, String> userColumn;
+
+    @FXML
+    private TableColumn<Document, Double> amountColumn;
+
+    @FXML
+    private TableColumn<Document, String> currencyColumn;
+
+    @FXML
+    private TableColumn<Document, Double> exchangeRateColumn;
+
+    @FXML
+    private TableColumn<Document, String> productColumn;
+
+    @FXML
+    private TableColumn<Document, Double> quantityColumn;
+
+    // ... (other code)
+
+    @FXML
+    private void initialize() {
+        // Configure the cell value factories for each column
+        numberColumn.setCellValueFactory(cellData -> cellData.getValue().numberProperty());
+        dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
+        userColumn.setCellValueFactory(cellData -> cellData.getValue().userProperty());
+        //amountColumn.setCellValueFactory(cellData -> cellData.getValue().amountProperty().asObject());
+        //currencyColumn.setCellValueFactory(cellData -> cellData.getValue().currencyProperty());
+        //exchangeRateColumn.setCellValueFactory(cellData -> cellData.getValue().exchangeRateProperty().asObject());
+        //productColumn.setCellValueFactory(cellData -> cellData.getValue().productProperty());
+        //quantityColumn.setCellValueFactory(cellData -> cellData.getValue().quantityProperty().asObject());
+
+        // Set the items in the TableView
+        documentTable.setItems(FXCollections.observableArrayList());
+
+        // Other initialization code...
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////
     @FXML
     private TableView<String> documentTable;
 
@@ -38,10 +130,10 @@ public class DocumentController {
 
     private List<Document> documents = new ArrayList<>();
     private ObservableList<String> documentNames = FXCollections.observableArrayList();
-    @FXML
-    private void initialize() {
-        documentTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-    }
+//    @FXML
+//    private void initialize() {
+//        documentTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+//    }
 
     private List<Document> getSelectedDocuments(){
         return documents;

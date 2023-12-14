@@ -4,9 +4,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 public class Invoice extends Document {
-    public String getNumber() {
-        return number;
-    }
+
 
     private String number;
     private LocalDate date;
@@ -20,7 +18,9 @@ public class Invoice extends Document {
     public void setNumber(String s) {
         this.number = s;
     }
-
+    public String getNumber() {
+        return number;
+    }
     public String getProduct() {
         return this.product;
     }

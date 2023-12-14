@@ -2,14 +2,69 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <BorderPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pack.DocumentController">
   <center>
-    <TableView fx:id="documentTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+    <TableView fx:id="documentTable" VBox.vgrow="ALWAYS">
       <columns>
-        <TableColumn text="Documents" />
+        <!-- Number Column -->
+        <TableColumn fx:id="numberColumn" text="Number">
+          <cellValueFactory>
+            <PropertyValueFactory property="number" />
+          </cellValueFactory>
+        </TableColumn>
+
+        <!-- Date Column -->
+        <TableColumn fx:id="dateColumn" text="Date">
+          <cellValueFactory>
+            <PropertyValueFactory property="date" />
+          </cellValueFactory>
+        </TableColumn>
+
+        <!-- User Column -->
+        <TableColumn fx:id="userColumn" text="User">
+          <cellValueFactory>
+            <PropertyValueFactory property="user" />
+          </cellValueFactory>
+        </TableColumn>
+
+<!--        &lt;!&ndash; Amount Column &ndash;&gt;-->
+<!--        <TableColumn fx:id="amountColumn" text="Amount">-->
+<!--          <cellValueFactory>-->
+<!--            <PropertyValueFactory property="amount" />-->
+<!--          </cellValueFactory>-->
+<!--        </TableColumn>-->
+
+        <!-- Currency Column -->
+<!--        <TableColumn fx:id="currencyColumn" text="Currency">-->
+<!--          <cellValueFactory>-->
+<!--            <PropertyValueFactory property="currency" />-->
+<!--          </cellValueFactory>-->
+<!--        </TableColumn>-->
+
+        <!-- Exchange Rate Column -->
+<!--        <TableColumn fx:id="exchangeRateColumn" text="Exchange Rate">-->
+<!--          <cellValueFactory>-->
+<!--            <PropertyValueFactory property="exchangeRate" />-->
+<!--          </cellValueFactory>-->
+<!--        </TableColumn>-->
+
+        <!-- Product Column -->
+<!--        <TableColumn fx:id="productColumn" text="Product">-->
+<!--          <cellValueFactory>-->
+<!--            <PropertyValueFactory property="product" />-->
+<!--          </cellValueFactory>-->
+<!--        </TableColumn>-->
+
+<!--        &lt;!&ndash; Quantity Column &ndash;&gt;-->
+<!--        <TableColumn fx:id="quantityColumn" text="Quantity">-->
+<!--          <cellValueFactory>-->
+<!--            <PropertyValueFactory property="quantity" />-->
+<!--          </cellValueFactory>-->
+<!--        </TableColumn>-->
       </columns>
     </TableView>
+
   </center>
   <bottom>
     <ToolBar BorderPane.alignment="CENTER">
