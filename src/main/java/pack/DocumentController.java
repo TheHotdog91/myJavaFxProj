@@ -12,7 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+import javafx.util.Pair;
+import javafx.scene.layout.GridPane;
 public class DocumentController {
 
     @FXML
@@ -30,7 +31,7 @@ public class DocumentController {
     @FXML
     private Button viewButton;
 
-    private List<Object> documents = new ArrayList<>();
+    private List<Document> documents = new ArrayList<>();
     private ObservableList<String> documentNames = FXCollections.observableArrayList();
     @FXML
     private void initialize() {
@@ -56,7 +57,7 @@ public class DocumentController {
 
         // Get the result of the dialog
         dialog.showAndWait().ifPresent(result -> {
-            Object newDocument = null;
+            Document newDocument = null;
 
             // Create the selected type of document
             switch (result) {
@@ -107,9 +108,30 @@ public class DocumentController {
 
     @FXML
     private void viewDocuments() {
-        // Implement logic to display selected documents in a separate window
+        List<Document> selectedDocuments = documents;
+        if (!selectedDocuments.isEmpty()) {
+            for (Document document : selectedDocuments) {
+                showDocumentDetailsDialog(document);
+            }
+        }
     }
 
+    private void showDocumentDetailsDialog(Document document) {
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Document Details");
+
+        TextArea textArea = new TextArea();
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        textArea.setText(document.toString());
+
+        ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(okButton);
+
+        dialog.getDialogPane().setContent(textArea);
+
+        dialog.showAndWait();
+    }
     @FXML
     private void deleteSelectedDocuments() {
         // Implement logic to delete selected documents from the list and update the table

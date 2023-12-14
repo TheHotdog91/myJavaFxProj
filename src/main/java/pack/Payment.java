@@ -2,7 +2,7 @@ package pack;
 
 import java.util.Date;
 
-public class Payment {
+public class Payment extends  Document {
     public void setNumber(String number) {
         this.number = number;
     }
@@ -16,6 +16,10 @@ public class Payment {
     private String user;
     private double amount;
     private String employee;
+
+    public String getEmployee() {
+        return employee;
+    }
 
     // Constructors, getters, and setters
 }

@@ -2,7 +2,7 @@ package pack;
 
 import java.util.Date;
 
-public class Invoice {
+public class Invoice extends Document {
     public String getNumber() {
         return number;
     }
@@ -18,6 +18,10 @@ public class Invoice {
 
     public void setNumber(String s) {
         this.number = s;
+    }
+
+    public String getProduct() {
+        return this.product;
     }
 
     // Constructors, getters, and setters
