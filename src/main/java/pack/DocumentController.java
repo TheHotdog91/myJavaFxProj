@@ -17,6 +17,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import java.io.BufferedReader;
 import  java.io.FileReader;
+
+
 public class DocumentController {
 
     @FXML
@@ -227,22 +229,72 @@ public class DocumentController {
 
 
     private Invoice createInvoice() {
-        TextInputDialog dialog = new TextInputDialog();
+        Dialog<Invoice> dialog = new Dialog<>();
         dialog.setTitle("Create Invoice");
         dialog.setHeaderText("Enter Invoice Details");
-        dialog.setContentText("Enter Invoice Number:");
 
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            Invoice invoice = new Invoice();
-            invoice.setNumber(result.get());
+        ButtonType createButton = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(createButton, ButtonType.CANCEL);
 
-            // Implement logic to gather and set other Invoice attributes
-            // ...
+        // Create the layout and components for the dialog
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new javafx.geometry.Insets(20, 150, 10, 10));
 
-            return invoice;
-        }
-        return null;
+        TextField numberField = new TextField();
+        DatePicker datepicker = new DatePicker();
+        TextField userField = new TextField();
+        TextField amountField = new TextField();
+        TextField currencyField = new TextField();
+        TextField exchangeRateField = new TextField();
+        TextField productField = new TextField();
+        TextField quantityField = new TextField();
+
+        grid.add(new Label("Number:"), 0, 0);
+        grid.add(numberField, 1, 0);
+        grid.add(new Label("Date:"), 0, 1);
+        grid.add(datepicker, 1, 1);
+        grid.add(new Label("User:"), 0, 2);
+        grid.add(userField, 1, 2);
+        grid.add(new Label("Amount:"), 0, 3);
+        grid.add(amountField, 1, 3);
+        grid.add(new Label("Currency:"), 0, 4);
+        grid.add(currencyField, 1, 4);
+        grid.add(new Label("Exchange Rate:"), 0, 5);
+        grid.add(exchangeRateField, 1, 5);
+        grid.add(new Label("Product:"), 0, 6);
+        grid.add(productField, 1, 6);
+        grid.add(new Label("Quantity:"), 0, 7);
+        grid.add(quantityField, 1, 7);
+
+        dialog.getDialogPane().setContent(grid);
+
+        // Request focus on the username field by default.
+        //?? ???????????????
+        // Platform.runLater(() -> numberField.requestFocus());
+
+        // Convert the result to a Document when the create button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == createButton) {
+                Invoice invoice = new Invoice();
+                invoice.setNumber(numberField.getText());
+                invoice.setDate(datepicker.getValue());
+                invoice.setUser(userField.getText());
+                invoice.setAmount(Double.parseDouble(amountField.getText()));
+                invoice.setCurrency(currencyField.getText());
+                invoice.setExchangeRate(Double.parseDouble(exchangeRateField.getText()));
+                invoice.setProduct(productField.getText());
+                invoice.setQuantity(Double.parseDouble(quantityField.getText()));
+
+                return invoice;
+            }
+            return null;
+        });
+
+        Optional<Invoice> result = dialog.showAndWait();
+        return result.orElse(null);
+
     }
 
     private Payment createPayment() {
