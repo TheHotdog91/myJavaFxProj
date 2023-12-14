@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Optional;
 import javafx.util.Pair;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import java.io.BufferedReader;
+import  java.io.FileReader;
 public class DocumentController {
 
     @FXML
@@ -38,7 +41,9 @@ public class DocumentController {
         documentTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
-
+    private List<Document> getSelectedDocuments(){
+        return documents;
+    }
     @FXML
     private void createDocuments() {
         // Implement document creation logic and add to the list
@@ -82,17 +87,39 @@ public class DocumentController {
 
     @FXML
     private void saveDocuments() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-        File file = fileChooser.showSaveDialog(null);
+        List<Document> selectedDocuments = getSelectedDocuments();
 
-        if (file != null) {
-            try (FileWriter writer = new FileWriter(file)) {
-                // Implement logic to write documents to the file
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (!selectedDocuments.isEmpty()) {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+            File file = fileChooser.showSaveDialog(null);
+
+            if (file != null) {
+                saveDocumentsToFile(selectedDocuments, file);
             }
         }
+    }
+
+    private void saveDocumentsToFile(List<Document> documents, File file) {
+        try (FileWriter writer = new FileWriter(file)) {
+            for (Document document : documents) {
+                writer.write(document.toString());
+                writer.write("\n\n");
+            }
+
+            showAlert("Save Successful", "Documents saved to " + file.getAbsolutePath(), Alert.AlertType.INFORMATION);
+        } catch (IOException e) {
+            showAlert("Error", "Error saving documents to file", Alert.AlertType.ERROR);
+            e.printStackTrace();
+        }
+    }
+
+    private void showAlert(String title, String content, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 
     @FXML
@@ -102,33 +129,94 @@ public class DocumentController {
         File file = fileChooser.showOpenDialog(null);
 
         if (file != null) {
-            // Implement logic to read documents from the file and add to the list
+            List<Document> loadedDocuments = loadDocumentsFromFile(file);
+            if (!loadedDocuments.isEmpty()) {
+                documents.addAll(loadedDocuments);
+                updateTable();
+            }
         }
+    }
+
+    private List<Document> loadDocumentsFromFile(File file) {
+        List<Document> loadedDocuments = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            StringBuilder documentDetails = new StringBuilder();
+
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().isEmpty()) {
+                    // Blank line indicates the end of a document details block
+                    // Parse the details and create a document
+                    Document document = createDocumentFromDetails(documentDetails.toString());
+                    if (document != null) {
+                        loadedDocuments.add(document);
+                    }
+                    documentDetails.setLength(0);  // Clear the StringBuilder for the next document
+                } else {
+                    documentDetails.append(line).append("\n");
+                }
+            }
+
+            // Check for the last document in case the file doesn't end with a blank line
+            if (documentDetails.length() > 0) {
+                Document document = createDocumentFromDetails(documentDetails.toString());
+                if (document != null) {
+                    loadedDocuments.add(document);
+                }
+            }
+
+            showAlert("Load Successful", "Documents loaded from " + file.getAbsolutePath(), Alert.AlertType.INFORMATION);
+        } catch (IOException e) {
+            showAlert("Error", "Error loading documents from file", Alert.AlertType.ERROR);
+            e.printStackTrace();
+        }
+
+        return loadedDocuments;
+    }
+
+    private Document createDocumentFromDetails(String details) {
+        // Implement logic to parse details and create a Document object
+        // You need to modify this method based on the actual structure of your document details
+        // For simplicity, we'll assume details contain only one document type (e.g., Invoice)
+        String[] lines = details.split("\n");
+        // Parse lines and create a document object
+        // ...
+
+        return null;  // Return null for now, you need to replace it with the actual document object
     }
 
     @FXML
     private void viewDocuments() {
         List<Document> selectedDocuments = documents;
+
         if (!selectedDocuments.isEmpty()) {
-            for (Document document : selectedDocuments) {
-                showDocumentDetailsDialog(document);
-            }
+            showDocumentDetailsDialog(selectedDocuments);
         }
     }
 
-    private void showDocumentDetailsDialog(Document document) {
+    private void showDocumentDetailsDialog(List<Document> documents) {
         Dialog<Void> dialog = new Dialog<>();
         dialog.setTitle("Document Details");
 
-        TextArea textArea = new TextArea();
+        VBox content = new VBox();
+        content.setSpacing(10);
+
+        StringBuilder details = new StringBuilder();
+
+        for (Document document : documents) {
+            details.append(document.toString()).append("\n\n");
+        }
+
+        TextArea textArea = new TextArea(details.toString());
         textArea.setEditable(false);
         textArea.setWrapText(true);
-        textArea.setText(document.toString());
+
+        content.getChildren().add(textArea);
+        dialog.getDialogPane().setContent(content);
 
         ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(okButton);
-
-        dialog.getDialogPane().setContent(textArea);
 
         dialog.showAndWait();
     }
