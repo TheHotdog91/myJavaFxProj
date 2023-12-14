@@ -62,7 +62,7 @@ public class DocumentController {
         //quantityColumn.setCellValueFactory(cellData -> cellData.getValue().quantityProperty().asObject());
 
         // Set the items in the TableView
-        //documentTable.setItems(FXCollections.observableArrayList());
+        documentTable.setItems(documentMy);
 
         // Other initialization code...
     }
@@ -138,7 +138,7 @@ public class DocumentController {
                 ///////////////////////////////
                 documents.add(newDocument);
                 updateTable();
-                initialize();
+                //initialize();
             }
         });
     }
