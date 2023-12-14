@@ -32,20 +32,20 @@ public class DocumentController {
     @FXML
     private TableColumn<Document, String> userColumn;
 
-    @FXML
-    private TableColumn<Document, Double> amountColumn;
-
-    @FXML
-    private TableColumn<Document, String> currencyColumn;
-
-    @FXML
-    private TableColumn<Document, Double> exchangeRateColumn;
-
-    @FXML
-    private TableColumn<Document, String> productColumn;
-
-    @FXML
-    private TableColumn<Document, Double> quantityColumn;
+//    @FXML
+//    private TableColumn<Document, Double> amountColumn;
+//
+//    @FXML
+//    private TableColumn<Document, String> currencyColumn;
+//
+//    @FXML
+//    private TableColumn<Document, Double> exchangeRateColumn;
+//
+//    @FXML
+//    private TableColumn<Document, String> productColumn;
+//
+//    @FXML
+//    private TableColumn<Document, Double> quantityColumn;
 
     // ... (other code)
 
@@ -62,60 +62,17 @@ public class DocumentController {
         //quantityColumn.setCellValueFactory(cellData -> cellData.getValue().quantityProperty().asObject());
 
         // Set the items in the TableView
-        documentTable.setItems(FXCollections.observableArrayList());
+        //documentTable.setItems(FXCollections.observableArrayList());
 
         // Other initialization code...
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ///////////////////////////////////////////////////////////////////////////////////////
     @FXML
-    private TableView<String> documentTable;
-
+    private TableView<Document> documentTable;
+    @FXML
+    private ObservableList<Document> documentMy = FXCollections.observableArrayList();
     @FXML
     private Button createButton;
 
@@ -128,7 +85,9 @@ public class DocumentController {
     @FXML
     private Button viewButton;
 
+    @FXML
     private List<Document> documents = new ArrayList<>();
+    @FXML
     private ObservableList<String> documentNames = FXCollections.observableArrayList();
 //    @FXML
 //    private void initialize() {
@@ -173,8 +132,13 @@ public class DocumentController {
 
             // Add the new document to the list and update the table
             if (newDocument != null) {
+                documentMy.add(newDocument);
+                documentTable.setItems(documentMy);
+
+                ///////////////////////////////
                 documents.add(newDocument);
                 updateTable();
+                initialize();
             }
         });
     }
@@ -508,10 +472,12 @@ public class DocumentController {
 
     private void updateTable() {
         // Update the table with the names of the documents
-        documentNames.clear();
+        //documentNames.clear();
         for (Object document : documents) {
             documentNames.add(document.toString());
         }
+        //initialize();
     }
+
 
 }
