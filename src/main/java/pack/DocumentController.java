@@ -18,7 +18,7 @@ import javafx.scene.layout.VBox;
 import java.io.BufferedReader;
 import  java.io.FileReader;
 import java.time.LocalDate;
-
+import javafx.application.Platform;
 public class DocumentController {
 
 
@@ -282,7 +282,7 @@ public class DocumentController {
 
     @FXML
     private void viewDocuments() {
-        List<Document> selectedDocuments = documents;
+        List<Document> selectedDocuments = getSelectedDocuments();
 
         if (!selectedDocuments.isEmpty()) {
             showDocumentDetailsDialog(selectedDocuments);
@@ -390,42 +390,121 @@ public class DocumentController {
     }
 
     private Payment createPayment() {
-        TextInputDialog dialog = new TextInputDialog();
+        Dialog<Payment> dialog = new Dialog<>();
         dialog.setTitle("Create Payment");
         dialog.setHeaderText("Enter Payment Details");
-        dialog.setContentText("Enter Payment Number:");
 
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            Payment payment = new Payment();
-            payment.setNumber(result.get());
+        ButtonType createButton = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(createButton, ButtonType.CANCEL);
 
-            // Implement logic to gather and set other Payment attributes
-            // ...
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new javafx.geometry.Insets(20, 150, 10, 10));
 
-            return payment;
-        }
-        return null;
+        TextField numberField = new TextField();
+        DatePicker datePicker = new DatePicker();
+        TextField userField = new TextField();
+        TextField amountField = new TextField();
+        TextField employeeField = new TextField();
+
+        grid.add(new Label("Number:"), 0, 0);
+        grid.add(numberField, 1, 0);
+        grid.add(new Label("Date:"), 0, 1);
+        grid.add(datePicker, 1, 1);
+        grid.add(new Label("User:"), 0, 2);
+        grid.add(userField, 1, 2);
+        grid.add(new Label("Amount:"), 0, 3);
+        grid.add(amountField, 1, 3);
+        grid.add(new Label("Employee:"), 0, 4);
+        grid.add(employeeField, 1, 4);
+
+        dialog.getDialogPane().setContent(grid);
+
+        Platform.runLater(() -> numberField.requestFocus());
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == createButton) {
+                Payment payment = new Payment();
+                payment.setNumber(numberField.getText());
+                payment.setDate(datePicker.getValue());
+                payment.setUser(userField.getText());
+                payment.setAmount(Double.parseDouble(amountField.getText()));
+                payment.setEmployee(employeeField.getText());
+                return payment;
+            }
+            return null;
+        });
+
+        Optional<Payment> result = dialog.showAndWait();
+        return result.orElse(null);
+
     }
 
     private PaymentRequest createPaymentRequest() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Create Payment Request");
-        dialog.setHeaderText("Enter Payment Request Details");
-        dialog.setContentText("Enter Payment Request Number:");
 
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            PaymentRequest paymentRequest = new PaymentRequest();
-            paymentRequest.setNumber(result.get());
+            Dialog<PaymentRequest> dialog = new Dialog<>();
+            dialog.setTitle("Create Payment Request");
+            dialog.setHeaderText("Enter Payment Request Details");
 
-            // Implement logic to gather and set other Payment Request attributes
-            // ...
+            ButtonType createButton = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
+            dialog.getDialogPane().getButtonTypes().addAll(createButton, ButtonType.CANCEL);
 
-            return paymentRequest;
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new javafx.geometry.Insets(20, 150, 10, 10));
+
+            TextField numberField = new TextField();
+            DatePicker datePicker = new DatePicker();
+            TextField userField = new TextField();
+            TextField counterpartyField = new TextField();
+            TextField amountField = new TextField();
+            TextField currencyField = new TextField();
+            TextField exchangeRateField = new TextField();
+            TextField commissionField = new TextField();
+
+            grid.add(new Label("Number:"), 0, 0);
+            grid.add(numberField, 1, 0);
+            grid.add(new Label("Date:"), 0, 1);
+            grid.add(datePicker, 1, 1);
+            grid.add(new Label("User:"), 0, 2);
+            grid.add(userField, 1, 2);
+            grid.add(new Label("Counterparty:"), 0, 3);
+            grid.add(counterpartyField, 1, 3);
+            grid.add(new Label("Amount:"), 0, 4);
+            grid.add(amountField, 1, 4);
+            grid.add(new Label("Currency:"), 0, 5);
+            grid.add(currencyField, 1, 5);
+            grid.add(new Label("Exchange Rate:"), 0, 6);
+            grid.add(exchangeRateField, 1, 6);
+            grid.add(new Label("Commission:"), 0, 7);
+            grid.add(commissionField, 1, 7);
+
+            dialog.getDialogPane().setContent(grid);
+
+            Platform.runLater(() -> numberField.requestFocus());
+
+            dialog.setResultConverter(dialogButton -> {
+                if (dialogButton == createButton) {
+                    PaymentRequest paymentRequest = new PaymentRequest();
+                    paymentRequest.setNumber(numberField.getText());
+                    paymentRequest.setDate(datePicker.getValue());
+                    paymentRequest.setUser(userField.getText());
+                    paymentRequest.setCounterparty(counterpartyField.getText());
+                    paymentRequest.setAmount(Double.parseDouble(amountField.getText()));
+                    paymentRequest.setCurrency(currencyField.getText());
+                    paymentRequest.setExchangeRate(Double.parseDouble(exchangeRateField.getText()));
+                    paymentRequest.setCommission(Double.parseDouble(commissionField.getText()));
+                    return paymentRequest;
+                }
+                return null;
+            });
+
+            Optional<PaymentRequest> result = dialog.showAndWait();
+            return result.orElse(null);
         }
-        return null;
-    }
+
 
     private void updateTable() {
         // Update the table with the names of the documents
